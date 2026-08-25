@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Resume Analysis - Agentic AI Career Assistant</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #1e293b;
+        }
+
+        /* NAVBAR */
+
+        nav {
+            background: #111827;
+            color: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h2 {
+            font-size: 23px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            font-size: 15px;
+        }
+
+        nav a:hover {
+            color: #93c5fd;
+        }
+
+        /* MAIN */
+
+        .container {
+            width: 90%;
+            max-width: 1150px;
+            margin: 50px auto;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .title h1 {
+            font-size: 42px;
+            margin-bottom: 12px;
+        }
+
+        .title p {
+            color: #64748b;
+            font-size: 18px;
+        }
+
+        /* CARD */
+
+        .card {
+            background: white;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* UPLOAD */
+
+        .upload-box {
+            border: 2px dashed #cbd5e1;
+            border-radius: 14px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 22px;
+        }
+
+        .upload-box h2 {
+            margin-bottom: 10px;
+        }
+
+        .upload-box p {
+            color: #64748b;
+        }
+
+        input[type="file"] {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #2563eb;
+            color: white;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        /* ERROR */
+
+        .error {
+            margin-top: 20px;
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        /* ANALYSIS */
+
+        .analysis {
+            margin-top: 35px;
+        }
+
+        /* SCORE */
+
+        .score {
+            background: #eff6ff;
+            border-radius: 18px;
+            padding: 28px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .score h2 {
+            margin-bottom: 10px;
+        }
+
+        .score-number {
+            font-size: 55px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .score p {
+            color: #64748b;
+        }
+
+        /* GRID */
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .box {
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 25px;
+        }
+
+        .box h3 {
+            margin-bottom: 15px;
+            font-size: 21px;
+        }
+
+        ul {
+            padding-left: 20px;
+            line-height: 1.9;
+        }
+
+        li {
+            margin-bottom: 3px;
+        }
+
+        /* LEARNING PLAN */
+
+        .learning-plan {
+            margin-top: 25px;
+            background: #eefdf5;
+            border-radius: 14px;
+            padding: 25px;
+        }
+
+        .learning-plan h2 {
+            margin-bottom: 15px;
+        }
+
+        .learning-plan li {
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+
+        /* RESUME TEXT */
+
+        .resume-content {
+            margin-top: 30px;
+        }
+
+        .resume-content h2 {
+            margin-bottom: 15px;
+        }
+
+        .resume-text {
+            background: #f1f5f9;
+            padding: 20px;
+            border-radius: 10px;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            max-height: 450px;
+            overflow-y: auto;
+        }
+
+        /* BACK BUTTON */
+
+        .back-button {
+            display: block;
+            width: 200px;
+            margin: 30px auto 0;
+            text-align: center;
+            padding: 12px;
+            background: #111827;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .back-button:hover {
+            background: #1f2937;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 750px) {
+
+            nav {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
+
+            nav a {
+                margin: 0 8px;
+            }
+
+            .title h1 {
+                font-size: 32px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<nav>
+
+    <h2>
+        🤖 Agentic AI Career Assistant
+    </h2>
+
+    <div>
+
+        <a href="/">
+            Home
+        </a>
+
+        <a href="/resume">
+            Resume Analysis
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- MAIN -->
+
+<div class="container">
+
+    <div class="title">
+
+        <h1>
+            📄 Resume Analysis
+        </h1>
+
+        <p>
+            Upload your resume and get an automated career analysis.
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <!-- UPLOAD FORM -->
+
+        <form
+                action="/resume/analyze"
+                method="post"
+                enctype="multipart/form-data">
+
+            <div class="upload-box">
+
+                <h2>
+                    Upload Your Resume
+                </h2>
+
+                <p>
+                    Select your resume in PDF format.
+                </p>
+
+                <input
+                        type="file"
+                        name="resume"
+                        accept=".pdf"
+                        required>
+
+            </div>
+
+            <button type="submit">
+                Analyze Resume
+            </button>
+
+        </form>
+
+
+        <!-- ERROR -->
+
+        <div
+                class="error"
+                th:if="${error}"
+                th:text="${error}">
+        </div>
+
+
+        <!-- ANALYSIS RESULT -->
+
+        <div
+                class="analysis"
+                th:if="${resumeText}">
+
+
+            <!-- SCORE -->
+
+            <div class="score">
+
+                <h2>
+                    📊 Resume Score
+                </h2>
+
+                <div
+                        class="score-number"
+                        th:text="${score + '%'}">
+                </div>
+
+                <p>
+                    Estimated resume readiness score
+                </p>
+
+            </div>
+
+
+            <!-- GRID -->
+
+            <div class="grid">
+
+
+                <!-- DETECTED SKILLS -->
+
+                <div class="box">
+
+                    <h3>
+                        🛠️ Detected Skills
+                    </h3>
+
+                    <ul>
+
+                        <li
+                                th:each="skill : ${detectedSkills}"
+                                th:text="${skill}">
+                        </li>
+
+                    </ul>
+
+                    <p
+                            th:if="${#lists.isEmpty(detectedSkills)}">
+
+                        No major technical skills detected.
+
+                    </p>
+
+                </div>
+
+
+                <!-- STRENGTHS -->
+
+                <div class="box">
+
+                    <h3>
+                        💪 Strengths
+                    </h3>
+
+                    <ul>
+
+                        <li
+                                th:each="strength : ${strengths}"
+                                th:text="${strength}">
+                        </li>
+
+                    </ul>
+
+                    <p
+                            th:if="${#lists.isEmpty(strengths)}">
+
+                        Add projects, certifications and profile links.
+
+                    </p>
+
+                </div>
+
+
+                <!-- JOB ROLES -->
+
+                <div class="box">
+
+                    <h3>
+                        💼 Suitable Job Roles
+                    </h3>
+
+                    <ul>
+
+                        <li
+                                th:each="role : ${jobRoles}"
+                                th:text="${role}">
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <!-- SKILL GAPS -->
+
+                <div class="box">
+
+                    <h3>
+                        📊 Skill Gaps
+                    </h3>
+
+                    <ul>
+
+                        <li
+                                th:each="gap : ${skillGaps}"
+                                th:text="${gap}">
+                        </li>
+
+                    </ul>
+
+                    <p
+                            th:if="${#lists.isEmpty(skillGaps)}">
+
+                        Great! No major skill gaps detected.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- PERSONALIZED LEARNING PLAN -->
+
+            <div
+                    class="learning-plan"
+                    th:if="${learningPlan}">
+
+                <h2>
+                    🗺️ Personalized Learning Plan
+                </h2>
+
+                <ul>
+
+                    <li
+                            th:each="plan : ${learningPlan}"
+                            th:text="${plan}">
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <!-- EXTRACTED RESUME -->
+
+            <div class="resume-content">
+
+                <h2>
+                    📃 Extracted Resume Content
+                </h2>
+
+                <div
+                        class="resume-text"
+                        th:text="${resumeText}">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- BACK -->
+
+        <a
+                href="/"
+                class="back-button">
+
+            ← Back to Dashboard
+
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

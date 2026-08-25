@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Project Suggestions - Agentic AI Career Assistant</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #1e293b;
+        }
+
+        nav {
+            background: #111827;
+            color: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h2 {
+            font-size: 23px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+        }
+
+        nav a:hover {
+            color: #93c5fd;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 50px auto;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .title h1 {
+            font-size: 42px;
+            margin-bottom: 12px;
+        }
+
+        .title p {
+            color: #64748b;
+            font-size: 18px;
+        }
+
+        .card {
+            background: white;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #2563eb;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #2563eb;
+            color: white;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .results {
+            margin-top: 35px;
+        }
+
+        .role-box {
+            background: #eff6ff;
+            padding: 22px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        .role-box h2 {
+            color: #1e40af;
+            margin-bottom: 8px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .box {
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 14px;
+        }
+
+        .box h3 {
+            margin-bottom: 15px;
+        }
+
+        .projects {
+            background: #eff6ff;
+        }
+
+        .tech {
+            background: #eefdf5;
+        }
+
+        .difficulty {
+            background: #fff7ed;
+        }
+
+        .learning {
+            background: #f5f3ff;
+        }
+
+        .resume {
+            background: #fff1f2;
+        }
+
+        ul {
+            padding-left: 20px;
+            line-height: 1.9;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+
+        .back {
+            display: block;
+            width: 200px;
+            margin: 30px auto 0;
+            padding: 12px;
+            text-align: center;
+            background: #111827;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .back:hover {
+            background: #1f2937;
+        }
+
+        @media (max-width: 750px) {
+
+            nav {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
+
+            nav a {
+                margin: 0 8px;
+            }
+
+            .title h1 {
+                font-size: 32px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<nav>
+
+    <h2>🤖 Agentic AI Career Assistant</h2>
+
+    <div>
+
+        <a href="/">Home</a>
+
+        <a href="/projects">
+            Project Suggestions
+        </a>
+
+    </div>
+
+</nav>
+
+<div class="container">
+
+    <div class="title">
+
+        <h1>💻 Project Suggestions</h1>
+
+        <p>
+            Find practical projects based on your target career and skills.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <form
+                action="/projects/suggest"
+                method="post">
+
+            <div class="form-group">
+
+                <label for="targetRole">
+                    Target Role
+                </label>
+
+                <input
+                        id="targetRole"
+                        type="text"
+                        name="targetRole"
+                        placeholder="Example: Java Developer"
+                        required>
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="skills">
+                    Your Skills
+                </label>
+
+                <input
+                        id="skills"
+                        type="text"
+                        name="skills"
+                        placeholder="Example: Java, C++, SQL"
+                        required>
+
+            </div>
+
+            <button type="submit">
+                💡 Suggest Projects
+            </button>
+
+        </form>
+
+
+        <div
+                class="results"
+                th:if="${projectNames}">
+
+            <div class="role-box">
+
+                <h2>
+                    🎯 Target Role:
+                    <span th:text="${targetRole}"></span>
+                </h2>
+
+                <p>
+                    Current Skills:
+                    <strong th:text="${skills}"></strong>
+                </p>
+
+            </div>
+
+
+            <div class="grid">
+
+                <div class="box projects">
+
+                    <h3>🚀 Recommended Projects</h3>
+
+                    <ul>
+
+                        <li
+                                th:each="project : ${projectNames}"
+                                th:text="${project}">
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <div class="box tech">
+
+                    <h3>🛠️ Technologies</h3>
+
+                    <ul>
+
+                        <li
+                                th:each="technology : ${technologies}"
+                                th:text="${technology}">
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <div class="box difficulty">
+
+                    <h3>📈 Difficulty Level</h3>
+
+                    <ul>
+
+                        <li
+                                th:each="level : ${difficulty}"
+                                th:text="${level}">
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <div class="box learning">
+
+                    <h3>📚 What You Will Learn</h3>
+
+                    <ul>
+
+                        <li
+                                th:each="item : ${learning}"
+                                th:text="${item}">
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <div class="box resume">
+
+                    <h3>📄 Resume Benefits</h3>
+
+                    <ul>
+
+                        <li
+                                th:each="benefit : ${resumeBenefits}"
+                                th:text="${benefit}">
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <a
+                href="/"
+                class="back">
+
+            ← Back to Dashboard
+
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

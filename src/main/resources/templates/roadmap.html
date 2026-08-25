@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Career Roadmap - Agentic AI Career Assistant</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #1e293b;
+        }
+
+        nav {
+            background: #111827;
+            color: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h2 {
+            font-size: 23px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            font-size: 15px;
+        }
+
+        nav a:hover {
+            color: #93c5fd;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 50px auto;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .title h1 {
+            font-size: 42px;
+            margin-bottom: 12px;
+        }
+
+        .title p {
+            color: #64748b;
+            font-size: 18px;
+        }
+
+        .card {
+            background: white;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #2563eb;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #2563eb;
+            color: white;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .results {
+            margin-top: 35px;
+        }
+
+        .role-box {
+            background: #eff6ff;
+            padding: 22px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        .role-box h2 {
+            color: #1e40af;
+        }
+
+        .roadmap-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .roadmap-box {
+            padding: 25px;
+            border-radius: 14px;
+        }
+
+        .days30 {
+            background: #eff6ff;
+        }
+
+        .days60 {
+            background: #fff7ed;
+        }
+
+        .days90 {
+            background: #eefdf5;
+        }
+
+        .roadmap-box h3 {
+            margin-bottom: 18px;
+            font-size: 21px;
+        }
+
+        ul {
+            padding-left: 20px;
+            line-height: 1.9;
+        }
+
+        li {
+            margin-bottom: 6px;
+        }
+
+        .back {
+            display: block;
+            width: 200px;
+            margin: 30px auto 0;
+            padding: 12px;
+            text-align: center;
+            background: #111827;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .back:hover {
+            background: #1f2937;
+        }
+
+        @media (max-width: 850px) {
+
+            .roadmap-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 700px) {
+
+            nav {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
+
+            nav a {
+                margin: 0 8px;
+            }
+
+            .title h1 {
+                font-size: 32px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<nav>
+
+    <h2>🤖 Agentic AI Career Assistant</h2>
+
+    <div>
+
+        <a href="/">Home</a>
+
+        <a href="/roadmap">
+            Career Roadmap
+        </a>
+
+    </div>
+
+</nav>
+
+<div class="container">
+
+    <div class="title">
+
+        <h1>🗺️ Career Roadmap</h1>
+
+        <p>
+            Get a personalized 30, 60 and 90-day roadmap for your career goal.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <form
+                action="/roadmap/generate"
+                method="post">
+
+            <div class="form-group">
+
+                <label for="targetRole">
+                    Target Role
+                </label>
+
+                <input
+                        id="targetRole"
+                        type="text"
+                        name="targetRole"
+                        placeholder="Example: Java Developer"
+                        required>
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="skills">
+                    Current Skills
+                </label>
+
+                <input
+                        id="skills"
+                        type="text"
+                        name="skills"
+                        placeholder="Example: Java, C++, SQL"
+                        required>
+
+            </div>
+
+            <button type="submit">
+                🗺️ Generate Career Roadmap
+            </button>
+
+        </form>
+
+
+        <div
+                class="results"
+                th:if="${days30}">
+
+            <div class="role-box">
+
+                <h2>
+                    🎯 Target Role:
+                    <span th:text="${targetRole}"></span>
+                </h2>
+
+                <p>
+                    Current Skills:
+                    <strong th:text="${skills}"></strong>
+                </p>
+
+            </div>
+
+
+            <div class="roadmap-grid">
+
+                <div class="roadmap-box days30">
+
+                    <h3>
+                        📅 First 30 Days
+                    </h3>
+
+                    <ul>
+
+                        <li
+                                th:each="item : ${days30}"
+                                th:text="${item}">
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <div class="roadmap-box days60">
+
+                    <h3>
+                        📅 Days 31-60
+                    </h3>
+
+                    <ul>
+
+                        <li
+                                th:each="item : ${days60}"
+                                th:text="${item}">
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <div class="roadmap-box days90">
+
+                    <h3>
+                        📅 Days 61-90
+                    </h3>
+
+                    <ul>
+
+                        <li
+                                th:each="item : ${days90}"
+                                th:text="${item}">
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <a href="/" class="back">
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
